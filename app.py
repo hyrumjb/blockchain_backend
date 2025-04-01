@@ -46,8 +46,8 @@ class Blockchain:
         ]
 
 blockchain = Blockchain()
-blockchain.add_block(Block(1, date.datetime.now(), "Transaction Data 1", ""))
-blockchain.add_block(Block(2, date.datetime.now(), "Transaction Data 2", ""))
+for i in range(1, 16):
+    blockchain.add_block(Block(i, date.datetime.now(), "Transaction Data i", ""))
 
 @app.route("/blockchain")
 def get_blockchain():
