@@ -4,7 +4,7 @@ import hashlib
 import datetime as date
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resource={r"/*": {"origins": "*"}})
 
 class Block:
     def __init__(self, index, timestamp, data, previous_hash):
@@ -52,7 +52,6 @@ blockchain.add_block(Block(2, date.datetime.now(), "Transaction Data 2", ""))
 @app.route("/blockchain")
 def get_blockchain():
     return jsonify(blockchain.to_dict())
-
 
 if __name__ == '__main__':
     app.run(debug=True)
