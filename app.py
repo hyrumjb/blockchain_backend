@@ -1,10 +1,10 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import hashlib
 import datetime as date
 
 app = Flask(__name__)
-CORS(app, resource={r"/*": {"origins": "*"}})
+CORS(app, supports_credentials=True)
 
 class Block:
     def __init__(self, index, timestamp, data, previous_hash):
@@ -52,6 +52,15 @@ for i in range(1, 16):
 @app.route("/blockchain")
 def get_blockchain():
     return jsonify(blockchain.to_dict())
+
+@app.route("/add-block", methods=["POST"])
+def add_block():
+    global blockchain
+    new_index = len(blockchain.chain)
+    new_data = f"Transaction Data {new_index}"
+    new_block = Block(new_index, date.datetime.now(), new_data, "")
+    blockchain.add_block(new_block)
+    return jsonify({"message": f"Block #{new_index} added!"})
 
 if __name__ == '__main__':
     app.run(debug=True)
