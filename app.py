@@ -12,7 +12,11 @@ CORS(app, supports_credentials=True)
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://blockchain_backend_user:SaxuQIhBJakZdrQ9m4tMJkDKGjjtTrEm@dpg-cvunuic9c44c738c1a20-a.oregon-postgres.render.com/blockchain_backend")
 
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(
+    DATABASE_URL, 
+    pool_pre_ping=True,
+    pool_recycle=300
+)
 Base = declarative_base()
 
 class BlockModel(Base):
