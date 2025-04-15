@@ -27,12 +27,12 @@ class BlockModel(Base):
 Session = sessionmaker(bind=engine)
 
 class Block:
-    def __init__(self, index, timestamp, data, previous_hash):
+    def __init__(self, index, timestamp, data, previous_hash, hash=None):
         self.index = index
         self.timestamp = timestamp
         self.data = data
         self.previous_hash = previous_hash
-        self.hash = self.calculate_hash()
+        self.hash = hash or self.calculate_hash()
 
     def calculate_hash(self):
         hash_string = str(self.index) + str(self.timestamp) + str(self.data) + str(self.previous_hash)
@@ -94,7 +94,8 @@ def add_block():
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
 
-    if not load_blockchain():
+    blockchain = load_blockchain()
+    if not blockchain:
         genesis_block = Block(0, str(date.datetime.now()), "Genesis Block", "0")
         save_block(genesis_block)
     
