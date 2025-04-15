@@ -24,6 +24,7 @@ class BlockModel(Base):
     hash = Column(String)
     previous_hash = Column(String)
 
+Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 class Block:
@@ -64,7 +65,6 @@ def save_block(block):
 blockchain = load_blockchain()
 if not blockchain:
     genesis_block = Block(0, str(date.datetime.now()), "Genesis Block", "0")
-    blockchain = [genesis_block]
     save_block(genesis_block)
 
 @app.route("/blockchain")
@@ -90,13 +90,6 @@ def add_block():
     new_block = Block(new_index, new_timestamp, new_data, latest_block.hash)
     save_block(new_block)
     return jsonify({"message": f"Block #{new_index} added!"})
-
-Base.metadata.create_all(engine)
-
-blockchain = load_blockchain()
-if not blockchain:
-    genesis_block = Block(0, str(date.datetime.now()), "Genesis Block", "0")
-    save_block(genesis_block)
 
 if __name__ == '__main__':
     app.run(debug=True)
